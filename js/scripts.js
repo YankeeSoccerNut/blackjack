@@ -56,14 +56,27 @@ var x = $('body').addClass('bg1');
     dealersHand.push(theDeck.shift());
 
     //place cards on the table....
-    placeCard('player',1, playersHand[0]);
-    placeCard('dealer',1, dealersHand[0]);
-    placeCard('player',2, playersHand[1]);
-    placeCard('dealer',2, dealersHand[1],false);
+    // setTimeout(function() {
+    //   placeCard('player',1, playersHand[0]);
+    // }, 1000);
+
+    // Still need to wrap a delay between the cards here, otherwise the other delays are concurrent and seem to appear all at once....
+
+    placeCard('player',1, playersHand[0],true,500);  //faceUp, half second delay
+
+    setTimeout(function() {
+      placeCard('dealer',1, dealersHand[0]);
+    }, 1000);
+    setTimeout(function() {
+      placeCard('player',2, playersHand[1]);
+    }, 2000);
+
+    setTimeout(function() {
+      placeCard('dealer',2, dealersHand[1],false);
+    }, 3000);
 
     calculateTotals(playersHand, 'player');
     calculateTotals(dealersHand, 'dealer');
-
 
   });
 
@@ -206,15 +219,18 @@ var x = $('body').addClass('bg1');
   }
 
 
-  function placeCard(who, where, whichCard, faceUp=true){
-    var classSelector = `.${who}-cards .card-${where}`;
+  function placeCard(who, where, whichCard, faceUp=true, delay=1000){
 
-    if (faceUp){
-      $(classSelector).html(`<img src="images/cards/${whichCard}.png">`);
-    }
-    else {
-      $(classSelector).html(`<img src="images/cards/steampunkcardback.jpg">`);
-    }
+    setTimeout(function() {
+      var classSelector = `.${who}-cards .card-${where}`;
+
+      if (faceUp){
+        $(classSelector).html(`<img src="images/cards/${whichCard}.png">`);
+      }
+      else {
+        $(classSelector).html(`<img src="images/cards/steampunkcardback.jpg">`);
+      }
+    }, delay);
   }
 
 
