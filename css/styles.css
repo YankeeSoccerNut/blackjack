@@ -11,6 +11,11 @@
   background-repeat: no-repeat;
   background-size: cover;
 }
+
+div{
+  /* temporary...set all text to white wherever it is */
+  color:  white;
+}
 .the-table{
 /*   background-color: #277714;
  */
@@ -25,8 +30,8 @@
 .card{
   height: 120px;
   /* background-color: #fff; */
-  padding: 10px;
-  border: 1px solid #fff;
+  /* padding: 10px; */
+  /* border: 1px solid #fff; */
 }
 
 .card img{
@@ -35,7 +40,7 @@
 }
 
 .dealer-total{
-  color: white;
+  /* color: white; */
 }
 
 /* .dealer-cards {
@@ -44,17 +49,17 @@
 
 .player-total{
   display: inline-block;
-  color: white;
+  /* color: white; */
 }
 
 .player-bank{
   display: inline-block;
-  color: white;
+  /* color: white; */
 }
 
 .player-bet{
   display: inline-block;
-  color: white;
+  /* color: white; */
 }
 
 .the-trapdoor{
@@ -82,3 +87,55 @@
 /*   margin-top:  650px; */
   transform: scale(.48, .48);
 }
+
+/* Let's try flipping! */
+/* Confirming target.... */
+/* .dealer-cards .card-2:hover{
+  transform:  rotateX(180deg);
+  background-color:  white;
+} */
+
+/* CSS to be modified....
+/* entire container, keeps perspective */
+/* .flip-container {
+  perspective: 1000px;
+}
+  flip the pane when hovered
+  .flip-container:hover .flipper, .flip-container.hover .flipper {
+    transform: rotateY(180deg);
+  }
+
+.flip-container, .front, .back {
+  width: 320px;
+  height: 480px;
+}
+
+flip speed goes here
+.flipper {
+  transition: 0.6s;
+  transform-style: preserve-3d;
+
+  position: relative;
+}
+
+hide back of pane during swap
+.front, .back {
+  backface-visibility: hidden;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+front pane, placed above back
+.front {
+  z-index: 2;
+  for firefox 31
+  transform: rotateY(0deg);
+}
+
+back, initially hidden pane
+.back {
+  transform: rotateY(180deg);
+}
+ */

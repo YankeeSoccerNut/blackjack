@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <title>Blackjack</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+
     <link rel="stylesheet" href="css/styles.css">
 
     <script src="js/jquery.min.js" charset="utf-8"></script>
@@ -25,12 +27,13 @@
         <div class="col-sm-8 col-sm-offset-1 the-table">
           <div class="row">
             <div class="col-sm-12 dealer-hand-wrapper">
-              <div class="col-sm-2 dealer-total">
-                  Dealer Total: 0
+              <div class="col-sm-2">
+                  Dealer Total:
+                  <span class="dealer-total">0</span>
               </div> <!-- /.col-sm-2 dealer-total -->
               <div class="col-sm-10 dealer-cards">
                 <div class="card col-sm-2 card-1">-</div>
-                <div class="card col-sm-2 card-2">-</div>
+                <div class="card col-sm-2 card-2 animated flipInX infinite">-</div>
                 <div class="card col-sm-2 card-3">-</div>
                 <div class="card col-sm-2 card-4">-</div>
                 <div class="card col-sm-2 card-5">-</div>
@@ -41,16 +44,17 @@
 
             <div class="col-sm-12 player-hand-wrapper">
               <div class="col-sm-2">
-                <span class="player-total">
-                Player Total: 0
-                </span>
+                Player Total:
+                <span class="player-total">0</span>
+                <br>Player Bank:
                 <span class="player-bank">
-                Player Bank: 100
+                100
                 </span>
+                <br>Current Bet:
                 <span class="player-bet">
-                Current Bet: 0
+                0
                 </span>
-            </div> <!-- /.col-sm-2 player-total -->
+              </div> <!-- /.col-sm-2 player-total -->
 
               <div class="col-sm-10 player-cards">
                 <div class="card col-sm-2 card-1">-</div>

@@ -1,4 +1,4 @@
-$(document).ready(function functionName() {
+$(document).ready(function () {
 // $('body').removeClass('bg1').addClass('bg2');
 
 var x = $('body').addClass('bg1');
@@ -26,8 +26,8 @@ var x = $('body').addClass('bg1');
       $('.bet-button').prop('disabled', true);  // no more betting
     }
 
-    $('.player-bank').html(`Player Bank: ${playerBank}`);
-    $('.player-bet').html(`Player Bet: ${playerBet}`);
+    $('.player-bank').html(`${playerBank}`);
+    $('.player-bet').html(`${playerBet}`);
 
   });
 
@@ -98,6 +98,7 @@ var x = $('body').addClass('bg1');
     checkWin();
   });
 
+
   function checkWin() {
     var playerTotal = calculateTotals(playersHand, 'player');
     var dealersTotal = calculateTotals(dealersHand, 'dealer');
@@ -142,8 +143,8 @@ var x = $('body').addClass('bg1');
     }
 
     // update the visuals....
-    $('.player-bank').html(`Player Bank: ${playerBank}`);
-    $('.player-bet').html(`Player Bet: ${playerBet}`);
+    $('.player-bank').html(`${playerBank}`);
+    $('.player-bet').html(`${playerBet}`);
 
     // Give player opportunity to play again....if they have money!
     if (playerBank > 0){
@@ -152,8 +153,8 @@ var x = $('body').addClass('bg1');
     else{
       console.log("Player is out of money...send them home");
     }
-
   }
+
 
   function newHands() {
 
