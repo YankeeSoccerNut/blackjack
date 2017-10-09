@@ -59,7 +59,7 @@ var x = $('body').addClass('bg1');
     placeCard('player',1, playersHand[0]);
     placeCard('dealer',1, dealersHand[0]);
     placeCard('player',2, playersHand[1]);
-    placeCard('dealer',2, dealersHand[1]);
+    placeCard('dealer',2, dealersHand[1],false);
 
     calculateTotals(playersHand, 'player');
     calculateTotals(dealersHand, 'dealer');
@@ -72,7 +72,7 @@ var x = $('body').addClass('bg1');
 
     console.log("player hit-button");
     playersHand.push(theDeck.shift());
-    placeCard('player',playersHand.length, playersHand[playersHand.length - 1]);
+    placeCard('player',playersHand.length, playersHand[playersHand.length - 1],true);
     playerTotal = calculateTotals(playersHand, 'player');
 
     if (playerTotal > 21){     // player busted...can't hit or stand
@@ -92,7 +92,7 @@ var x = $('body').addClass('bg1');
 
     while (dealersTotal < 17) {
       dealersHand.push(theDeck.shift());
-      placeCard('dealer',dealersHand.length, dealersHand[dealersHand.length - 1]);
+      placeCard('dealer',dealersHand.length, dealersHand[dealersHand.length - 1],true);
       dealersTotal = calculateTotals(dealersHand, 'dealer');
     }
     checkWin();
@@ -205,10 +205,15 @@ var x = $('body').addClass('bg1');
   }
 
 
-  function placeCard(who, where, whichCard){
+  function placeCard(who, where, whichCard, faceUp=true){
     var classSelector = `.${who}-cards .card-${where}`;
 
-    $(classSelector).html(`<img src="images/cards/${whichCard}.png">`);
+    if (faceUp){
+      $(classSelector).html(`<img src="images/cards/${whichCard}.png">`);
+    }
+    else {
+      $(classSelector).html(`<img src="images/cards/steampunkcardback.jpg">`);
+    }
   }
 
 

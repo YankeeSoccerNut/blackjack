@@ -63,6 +63,22 @@
   margin-left: -40px;
   height: 50px;
   width: 100px;
-  background-color:  black;
+  /* background-color:  black; */
   transform: perspective( 400px ) rotateX(30deg) skewX(-30deg);
+}
+
+.steam-char{
+  /* display: inline-block; */
+  position: relative;
+  top:  -200px;
+  left: -50px;
+  transform: scale(.25, .25);
+}
+
+.the-register{
+  position: absolute;
+  top: 380px;
+  left: 880px;
+/*   margin-top:  650px; */
+  transform: scale(.48, .48);
 }
