@@ -31,19 +31,49 @@ var x = $('body').addClass('bg1');
 
   });
 
+  $('.dd-button').click(function() {
+    // player is choosing to take double their bet and take just 1 card...
+    // so....double the bet, trigger the "hit" action and trigger stand if it not disabled (possible that it was disabled on hit if a bust occurs)
+
+    //Assumption:  this button only appears when it is possible for the player to double-down
+
+    if (playerBank < playerBet){  // should NEVER happen based on assumption
+      window.alert("Call the gaming commission....illegal bet.  NSF to double down!!");
+    }
+    else {
+      playerBank -= playerBet;
+      playerBet += playerBet;
+    }
+
+    $('.player-bank').html(`${playerBank}`);
+    $('.player-bet').html(`${playerBet}`);
+    $('.dd-button').css('display','none');
+
+    $('.hit-button').trigger('click');  // hit me!
+
+    //Use the hit button status to determine if we need to trigger stand...if disabled then player busted
+
+    if (!($('.hit-button').disabled)) {        // player didn't bust
+      $('.stand-button').trigger('click');   // hit me!
+    }
+
+  });
+
+
   $('.deal-button').click(function() {
 
 
     var theDeck = freshDeck.slice();
     theDeck = shuffleDeck(theDeck);
     console.log(theDeck);
+    var playerTotal = 0;
+    var dealersTotal = 0;
 
-
-    // $('.deal-button').addClass('disabled');
-    $('.deal-button').prop('disabled', true);  // player has to hit or stand but can't bet anymore
+    // player has to play the hand dealt...can't deal again nor bet anymore
+    $('.deal-button').prop('disabled', true);
     $('.bet-button').prop('disabled', true);
 
-    // let them play the hand...
+    // normal play is hit or stand....may be overridden below based on hand
     $('.hit-button').prop('disabled', false);
     $('.stand-button').prop('disabled', false);
 
@@ -55,33 +85,43 @@ var x = $('body').addClass('bg1');
     playersHand.push(theDeck.shift());
     dealersHand.push(theDeck.shift());
 
-    //place cards on the table....
-    // setTimeout(function() {
-    //   placeCard('player',1, playersHand[0]);
-    // }, 1000);
+    // // Test Blackjack
+    // playersHand.push('1h');
+    // playersHand.push('13h');
 
     // Still need to wrap a delay between the cards here, otherwise the other delays are concurrent and seem to appear all at once....
 
-    placeCard('player',1, playersHand[0],true,500);  //faceUp, half second delay
+    placeCard('player',1, playersHand[0],true,0);  //faceUp, half second delay
 
     setTimeout(function() {
       placeCard('dealer',1, dealersHand[0]);
-    }, 1000);
+    }, 500);
     setTimeout(function() {
       placeCard('player',2, playersHand[1]);
-    }, 2000);
-
+    }, 1000);
     setTimeout(function() {
       placeCard('dealer',2, dealersHand[1],false);
-    }, 3000);
+    }, 1500);
 
-    calculateTotals(playersHand, 'player');
-    calculateTotals(dealersHand, 'dealer');
+    playerTotal = calculateTotals(playersHand, 'player');
+    dealersTotal = calculateTotals(dealersHand, 'dealer');
+
+    // now override normal play based on playersHand...
+    if (playerTotal == 21){
+      $('.dd-button').css('display','none'); // can't double-down
+      $('.stand-button').trigger('click');  // be nice and stand for the player
+    } else if (playerBank >= playerBet){   // allow the player to double-down
+      $('.dd-button').css('display','inline-block');
+    }
+    else {
+      $('.dd-button').css('display','none');
+    }
 
   });
 
   $('.hit-button').click(function() {
     var playerTotal = 0;
+    $('.dd-button').css('display','none');
 
     console.log("player hit-button");
     playersHand.push(theDeck.shift());
@@ -100,12 +140,15 @@ var x = $('body').addClass('bg1');
 
     $('.hit-button').prop('disabled', true);  // player can't hit after standing
     $('.stand-button').prop('disabled', true);  // player can't stand again
+    $('.dd-button').css('display','none'); // can't double-down either
 
     var dealersTotal = calculateTotals(dealersHand, 'dealer');
 
+    var delayOffset = 0;
     while (dealersTotal < 17) {
+      delayOffset += 500;  // helps give illusion of pause between cards...
       dealersHand.push(theDeck.shift());
-      placeCard('dealer',dealersHand.length, dealersHand[dealersHand.length - 1],true);
+      placeCard('dealer',dealersHand.length, dealersHand[dealersHand.length - 1],true,delayOffset);
       dealersTotal = calculateTotals(dealersHand, 'dealer');
     }
     checkWin();
@@ -120,25 +163,21 @@ var x = $('body').addClass('bg1');
 
     if (playerTotal > 21) {
       //busted
-      console.log(`player busted ${playerTotal}`);
-      playerBet = 0;
+      $('#game-message').html(`PLAYER BUSTED! Lose ${playerBet}`);
     } else if (dealersTotal > 21) {
       // dealer busted...
       playerBank += playerBet * 2;
-      playerBet = 0;
-      console.log(`dealer busted ${dealersTotal}`);
-    } else if (playerTotal > dealersTotal) {
-      // you beat the dealer
-      playerBank += playerBet * 2;
-      playerBet = 0;
-      console.log('player beat the dealer');
-    } else if (dealersTotal >= playerTotal) {
-      // you lose to the dealer
-      playerBet = 0;
-      console.log('player loses to the dealer');
+      $('#game-message').html(`DEALER BUSTED! Win ${playerBet}`);
     } else if (playerTotal == 21 && playersHand.length == 2) {
       // player has BLACKJACK
       playerBlackJack = true;
+    } else if (playerTotal > dealersTotal) {
+      // you beat the dealer
+      playerBank += playerBet * 2;
+      $('#game-message').html(`PLAYER WINS Win ${playerBet}`);
+    } else if (dealersTotal >= playerTotal) {
+      // you lose to the dealer
+      $('#game-message').html(`HOUSE WINS.  Lose ${playerBet}`);
     }
 
     if (dealersTotal == 21 && dealersHand.length == 2) {
@@ -147,15 +186,18 @@ var x = $('body').addClass('bg1');
     }
 
     if (playerBlackJack && dealerBlackJack){
-      // it's a push...leave bet on the table
-      console.log("It's a PUSH");
+      // it's a push...
+      playerBank += playerBet;
+      $('#game-message').html("NO WINNER - PUSH");
     } else if (playerBlackJack) {
-      // Player Wins DOUBLE
-      playerBank += playerBet * 4;
-      console.log("Player has BLACKJACK!");
+      // Player Wins 150%
+      playerBank += playerBet * 2.5;
+      $('#game-message').html(`PLAYER WINS -- BLACKJACK PAYS ${playerBet*1.5}`);
     }
 
-    // update the visuals....
+    // update the totals....
+    playerBet = 0;  // Always goes to 0...
+    $('.dealer-total').html(dealersTotal);
     $('.player-bank').html(`${playerBank}`);
     $('.player-bet').html(`${playerBet}`);
 
@@ -164,7 +206,7 @@ var x = $('body').addClass('bg1');
       $('.bet-button').prop('disabled', false);
     }
     else{
-      console.log("Player is out of money...send them home");
+      $('#game-message').html("PLAYER LOST THEIR BANKROLL");
     }
   }
 
@@ -175,14 +217,15 @@ var x = $('body').addClass('bg1');
     playersHand = [];
     dealersHand = [];
 
-    // calculate totals...use function b/c it updates on screen
-    calculateTotals(playersHand, 'player');
-    calculateTotals(dealersHand, 'dealer');
-
     // clear out any cards on the table...
     for (let i = 1; i < 7; i++) {
       $(`.card-${i}`).html('-');
     }
+
+    // clear out game message and totals...
+    $('#game-message').html("");
+    $('.player-total').html("");
+    $('.dealer-total').html("");
 
   }
   function calculateTotals(hand, who) {
@@ -212,14 +255,16 @@ var x = $('body').addClass('bg1');
         aceCount -= 1;
       }
 
-    var classSelector = `.${who}-total`;
-    $(classSelector).html(handTotal);
+    if (who == 'player'){     // only player...dealer is later.
+      var classSelector = `.${who}-total`;
+      $(classSelector).html(handTotal);
+    }
 
     return(handTotal);
   }
 
 
-  function placeCard(who, where, whichCard, faceUp=true, delay=1000){
+  function placeCard(who, where, whichCard, faceUp=true, delay=500){
 
     setTimeout(function() {
       var classSelector = `.${who}-cards .card-${where}`;

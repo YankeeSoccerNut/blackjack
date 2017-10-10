@@ -27,13 +27,21 @@
         <div class="col-sm-8 col-sm-offset-1 the-table">
           <div class="row">
             <div class="col-sm-12 dealer-hand-wrapper">
+              <span id="game-message" class="text-center"></span>
               <div class="col-sm-2">
                   Dealer Total:
-                  <span class="dealer-total">0</span>
+                  <span class="dealer-total">??</span>
               </div> <!-- /.col-sm-2 dealer-total -->
               <div class="col-sm-10 dealer-cards">
                 <div class="card col-sm-2 card-1">-</div>
-                <div class="card col-sm-2 card-2 animated flipInX infinite">-</div>
+                <div class="card col-sm-2">
+                  <div class="card flip-container">
+                    <div class="card flipper">
+                      <div class="card card-2 front"><img src="images/cards/steampunkcardback.jpg"></div>
+                      <div class="card back"><img src="images/cards/1h.png"></div>
+                    </div> <!-- /.flipper -->
+                  </div> <!-- /.flip-container -->
+                </div> <!-- card-2 -->
                 <div class="card col-sm-2 card-3">-</div>
                 <div class="card col-sm-2 card-4">-</div>
                 <div class="card col-sm-2 card-5">-</div>
@@ -71,6 +79,12 @@
             <div class="col-sm-2 col-sm-offset-2">
               <button class="btn btn-success bet-button">
                 BET!
+              </button>
+              <button class="btn dd-button">
+                2X Down?
+              </button>
+              <button class="btn split-button">
+                Split?
               </button>
             </div>
             <div class="col-sm-2">
