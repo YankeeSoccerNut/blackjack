@@ -4,8 +4,6 @@
     <meta charset="utf-8">
     <title>Blackjack</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/animate.css">
-
     <link rel="stylesheet" href="css/styles.css">
 
     <script src="js/jquery.min.js" charset="utf-8"></script>
@@ -17,6 +15,7 @@
     </div> <!-- /.the-register -->
 
     <div class="container">
+      <div id="game-message" class="text-center"></div>
       <div class="row">
         <div class="col-sm-3 the-trapdoor">
           TRAPDOOR
@@ -27,21 +26,13 @@
         <div class="col-sm-8 col-sm-offset-1 the-table">
           <div class="row">
             <div class="col-sm-12 dealer-hand-wrapper">
-              <span id="game-message" class="text-center"></span>
               <div class="col-sm-2">
                   Dealer Total:
                   <span class="dealer-total">??</span>
               </div> <!-- /.col-sm-2 dealer-total -->
               <div class="col-sm-10 dealer-cards">
                 <div class="card col-sm-2 card-1">-</div>
-                <div class="card col-sm-2">
-                  <div class="card flip-container">
-                    <div class="card flipper">
-                      <div class="card card-2 front"><img src="images/cards/steampunkcardback.jpg"></div>
-                      <div class="card back"><img src="images/cards/1h.png"></div>
-                    </div> <!-- /.flipper -->
-                  </div> <!-- /.flip-container -->
-                </div> <!-- card-2 -->
+                <div class="card col-sm-2 card-2">-</div>
                 <div class="card col-sm-2 card-3">-</div>
                 <div class="card col-sm-2 card-4">-</div>
                 <div class="card col-sm-2 card-5">-</div>

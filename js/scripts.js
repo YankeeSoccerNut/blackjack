@@ -89,18 +89,22 @@ var x = $('body').addClass('bg1');
     // playersHand.push('1h');
     // playersHand.push('13h');
 
-    // Still need to wrap a delay between the cards here, otherwise the other delays are concurrent and seem to appear all at once....
+    //place each card after building a flippable card...add a delay to simulate real deal
 
-    placeCard('player',1, playersHand[0],true,0);  //faceUp, half second delay
+    // // Still need to wrap a delay between the cards here, otherwise the other delays are concurrent and seem to appear all at once....
+    //
+    placeCard('player',1, buildCard(playersHand[0],true,0));
 
     setTimeout(function() {
-      placeCard('dealer',1, dealersHand[0]);
+      placeCard('dealer',1, buildCard(dealersHand[0],true));
     }, 500);
+
     setTimeout(function() {
-      placeCard('player',2, playersHand[1]);
-    }, 1000);
+      placeCard('player',2, buildCard(playersHand[1],true));
+    }, 100);
+
     setTimeout(function() {
-      placeCard('dealer',2, dealersHand[1],false);
+      placeCard('dealer',2, buildCard(dealersHand[1],false));
     }, 1500);
 
     playerTotal = calculateTotals(playersHand, 'player');
@@ -122,21 +126,30 @@ var x = $('body').addClass('bg1');
   $('.hit-button').click(function() {
     var playerTotal = 0;
     $('.dd-button').css('display','none');
+    var cardHTML = "";
 
-    console.log("player hit-button");
     playersHand.push(theDeck.shift());
-    placeCard('player',playersHand.length, playersHand[playersHand.length - 1],true);
+
+    cardHTML = buildCard(playersHand[playersHand.length -1],true);
+
+    placeCard('player',playersHand.length, cardHTML);
+
     playerTotal = calculateTotals(playersHand, 'player');
 
-    if (playerTotal > 21){     // player busted...can't hit or stand
+    // check to see if player busted or hit the card limit for this game...act accordingly
+    if (playerTotal > 21){     
       $('.hit-button').prop('disabled', true);
       $('.stand-button').prop('disabled', true);
       checkWin();
+    } else if (playersHand.length == 6) {
+      $('.hit-button').prop('disabled', true);
+      $('.stand-button').trigger('click');
     }
 
   });
 
   $('.stand-button').click(function() {
+    var cardHTML = "";
 
     $('.hit-button').prop('disabled', true);  // player can't hit after standing
     $('.stand-button').prop('disabled', true);  // player can't stand again
@@ -148,9 +161,14 @@ var x = $('body').addClass('bg1');
     while (dealersTotal < 17) {
       delayOffset += 500;  // helps give illusion of pause between cards...
       dealersHand.push(theDeck.shift());
-      placeCard('dealer',dealersHand.length, dealersHand[dealersHand.length - 1],true,delayOffset);
+
+      cardHTML = buildCard(dealersHand[dealersHand.length - 1],true);
+
+      placeCard('dealer',dealersHand.length, cardHTML);
+
       dealersTotal = calculateTotals(dealersHand, 'dealer');
     }
+
     checkWin();
   });
 
@@ -194,6 +212,9 @@ var x = $('body').addClass('bg1');
       playerBank += playerBet * 2.5;
       $('#game-message').html(`PLAYER WINS -- BLACKJACK PAYS ${playerBet*1.5}`);
     }
+
+    // reveal dealers 2nd card....
+    $('.dealer-cards .card-2 .flipper').addClass('flip');
 
     // update the totals....
     playerBet = 0;  // Always goes to 0...
@@ -263,18 +284,40 @@ var x = $('body').addClass('bg1');
     return(handTotal);
   }
 
+  function buildCard(whichCard, faceUp=true) {
+    // this function constructs a flippable card and returns the complete HTML that can be placed into the DOM
+    var cardHTML = "";
 
-  function placeCard(who, where, whichCard, faceUp=true, delay=500){
+    if (faceUp == true){
+      // make the top the value, bottom the cardback
+      cardHTML += `<div class="flipper">`;
+      cardHTML += `<div class='card-top'>`;
+      cardHTML += `<img src="images/cards/${whichCard}.png">`;
+      cardHTML += `</div>`;
+      cardHTML += `<div class='card-bottom'>`;
+      cardHTML += `<img src="images/cards/steampunkcardback.jpg">`;
+      cardHTML += `</div>`;
+      cardHTML += `</div>`;
+    } else {
+      // make the top the cardback, bottom the value
+      cardHTML += `<div class="flipper">`;
+      cardHTML += `<div class='card-top'>`;
+      cardHTML += `<img src="images/cards/steampunkcardback.jpg">`;
+      cardHTML += `</div>`;
+      cardHTML += `<div class='card-bottom'>`;
+      cardHTML += `<img src="images/cards/${whichCard}.png">`;
+      cardHTML += `</div>`;
+      cardHTML += `</div>`;
+    }
+
+    return(cardHTML);
+
+  }
+  function placeCard(who, where, cardHTML, delay=500){
 
     setTimeout(function() {
       var classSelector = `.${who}-cards .card-${where}`;
-
-      if (faceUp){
-        $(classSelector).html(`<img src="images/cards/${whichCard}.png">`);
-      }
-      else {
-        $(classSelector).html(`<img src="images/cards/steampunkcardback.jpg">`);
-      }
+      $(classSelector).html(cardHTML);
     }, delay);
   }
 
