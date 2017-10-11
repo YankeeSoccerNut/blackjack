@@ -3,10 +3,21 @@
   <head>
     <meta charset="utf-8">
     <title>Blackjack</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- Latest compiled and minified Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Latest compiled and minified jQuery javascript -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+</script>
+
+<!-- Latest compiled and minified Bootstrap javaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
     <link rel="stylesheet" href="css/styles.css">
 
-    <script src="js/jquery.min.js" charset="utf-8"></script>
     <script src="js/scripts.js" charset="utf-8"></script>
   </head>
   <body>
@@ -15,7 +26,11 @@
     </div> <!-- /.the-register -->
 
     <div class="container">
-      <div id="game-message" class="text-center"></div>
+      <ul class="nav nav-tabs">
+  <li role="presentation" class="active"><a href="#">Home</a></li>
+  <li role="presentation"><a href="#">Profile</a></li>
+  <li role="presentation"><a href="#">Messages</a></li>
+      </ul>
       <div class="row">
         <div class="col-sm-3 the-trapdoor">
           TRAPDOOR
@@ -70,6 +85,7 @@
             <div class="col-sm-2 col-sm-offset-2">
               <button class="btn btn-success bet-button">
                 BET!
+                <span class="glyphicon glyphicon-piggy-bank" aria-hidden="true"></span>
               </button>
               <button class="btn dd-button">
                 2X Down?
@@ -81,22 +97,35 @@
             <div class="col-sm-2">
               <button class="btn btn-primary deal-button">
                 Deal!
+                <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span>
               </button>
             </div>
             <div class="col-sm-2 col-sm-offset-2">
               <button class="btn btn-danger hit-button">
                 Hit!
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
               </button>
             </div>
             <div class="col-sm-2">
               <button class="btn btn-warning stand-button">
                 Stand
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
               </button>
             </div>
           </div> <!-- /.row buttons -->
 
         </div> <!-- /.col-sm-12 the-table -->
       </div> <!-- /.row table -->
+
+      <!-- Small modal -->
+<div id="game-modal" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="Steampunk Blackjack">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content text-center" id="game-message">
+      Game Message Goes Here
+    </div>
+  </div>
+</div>
+
     </div> <!-- /.container -->
 
   </body>

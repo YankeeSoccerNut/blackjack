@@ -93,7 +93,9 @@ div{
   transform: scale(.48, .48);
 }
 
-
+#game-message{
+  background-color: #277714;
+}
 /* Let's try flipping! */
 
 .flipper{

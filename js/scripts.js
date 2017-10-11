@@ -13,6 +13,12 @@ var x = $('body').addClass('bg1');
 
   var theDeck = freshDeck.slice();  // have to slice...otherwise reference
 
+  // hide the game-modal on any key press
+  $(document).keyup(function(event) {
+       $('#game-modal').modal('hide');
+    });
+
+
   $('.bet-button').click(function() {
 
     $('.deal-button').prop('disabled', false);  // allow the deal after bet
@@ -137,7 +143,7 @@ var x = $('body').addClass('bg1');
     playerTotal = calculateTotals(playersHand, 'player');
 
     // check to see if player busted or hit the card limit for this game...act accordingly
-    if (playerTotal > 21){     
+    if (playerTotal > 21){
       $('.hit-button').prop('disabled', true);
       $('.stand-button').prop('disabled', true);
       checkWin();
@@ -229,6 +235,8 @@ var x = $('body').addClass('bg1');
     else{
       $('#game-message').html("PLAYER LOST THEIR BANKROLL");
     }
+
+    $('#game-modal').modal('show');
   }
 
 
