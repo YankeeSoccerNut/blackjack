@@ -141,17 +141,24 @@ var x = $('body').addClass('bg1');
       placeCard('dealer',2, buildCard(dealersHand[1],false));
     }, 1500);
 
+    // TODO: Offer insurance if the dealer is showing an Ace?
     playerTotal = calculateTotals(playersHand, 'player');
-    dealersTotal = calculateTotals(dealersHand, 'dealer');
 
-    // now override normal play based on playersHand...
+    // only need the value of the dealer's 1st card....so take a slice
+    dealersTotal = calculateTotals(dealersHand.slice(0,1), 'dealer');
+
+
+    // now override normal play based on playersHand and dealer 1st card
     if (playerTotal == 21){
       $('.dd-button').css('display','none'); // can't double-down
-      $('.stand-button').trigger('click');  // be nice and stand for the player
+      // if dealersTotal == 11 then they're showing an Ace....
+      if (dealersTotal == 11){
+        $('#game-message').html("Dealer Showing Ace...Implement Insurance?");
+        $('#game-modal').modal('show');
+      }
     } else if (playerBank >= playerBet){   // allow the player to double-down
       $('.dd-button').css('display','inline-block');
-    }
-    else {
+    } else {
       $('.dd-button').css('display','none');
     }
 
@@ -190,22 +197,23 @@ var x = $('body').addClass('bg1');
     $('.dd-button').css('display','none'); // can't double-down either
 
     var dealersTotal = calculateTotals(dealersHand, 'dealer');
+    var playerTotal = calculateTotals(playersHand, 'player');
 
-    var delayOffset = 0;
-    while (dealersTotal < 17) {
-      delayOffset += 500;  // helps give illusion of pause between cards...
-      dealersHand.push(theDeck.shift());
+    if (!((playerTotal == 21) && (playersHand.length == 2))) { // player does not have BlackJack
+      var delayOffset = 0;
+      while (dealersTotal < 17) {
+        delayOffset += 500;  // helps give illusion of pause between cards...
+        dealersHand.push(theDeck.shift());
 
-      cardHTML = buildCard(dealersHand[dealersHand.length - 1],true);
+        cardHTML = buildCard(dealersHand[dealersHand.length - 1],true);
 
-      placeCard('dealer',dealersHand.length, cardHTML, delayOffset);
+        placeCard('dealer',dealersHand.length, cardHTML, delayOffset);
 
-      dealersTotal = calculateTotals(dealersHand, 'dealer');
+        dealersTotal = calculateTotals(dealersHand, 'dealer');
+      }
     }
-
     checkWin();
   });
-
 
   function checkWin() {
     var playerTotal = calculateTotals(playersHand, 'player');
@@ -267,7 +275,6 @@ var x = $('body').addClass('bg1');
     setTimeout(function() {
       $('#game-modal').modal('show');
     }, 2000);
-
   }
 
 
@@ -288,6 +295,9 @@ var x = $('body').addClass('bg1');
     $('.dealer-total').html("");
 
   }
+  // TODO: take who out of this function....separation of concerns
+  // function returns total, let some other function use the value to display
+
   function calculateTotals(hand, who) {
     //Our cards go from 1(Ace) to 13(King)...
     // Adjust for  K, Q, J.  Ace adjustment depends on current total

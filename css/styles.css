@@ -116,10 +116,11 @@ div{
   animation-direction: alternate;
 }
 @keyframes steamfly {
-    0%   {top: 100px; right: 100px;}
-    50%  {top: 300px; right: 300px; perspective: 300px}
-    75%  {top: 500px; right: 500px;}
-    100% {top: 10px; left: 900px;}
+    0%   {top: 100px; right: 100px; transform: rotateX(10deg) rotateY(60deg)}
+    25%   {top: 100px; right: 100px; transform: rotateX(10deg) rotateY(45deg)}
+    50%  {top: 300px; right: 300px; transform: rotateX(-10deg) rotateY(0deg)}
+    75%  {top: 500px; right: 500px; transform: rotateX(10deg) rotateY(-45deg)}
+    100% {top: 10px; left: 900px; transform: rotateX(-10deg) rotateY(0deg)}
 }
 
 /* Let's try flipping! */
