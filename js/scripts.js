@@ -54,14 +54,42 @@ var x = $('body').addClass('bg1');
     $('.player-bank').html(`${playerBank}`);
     $('.player-bet').html(`${playerBet}`);
     $('.dd-button').css('display','none');
+    $('.hit-button').prop('disabled', true); // can't hit after double down
+    $('.stand-button').prop('disabled', true); // double down is a stand of sorts
+    // down and dirty....player won't know the card either....
+    var cardHTML = "";
 
-    $('.hit-button').trigger('click');  // hit me!
+    playersHand.push(theDeck.shift());
 
-    //Use the hit button status to determine if we need to trigger stand...if disabled then player busted
+    // double down will always be the players 3rd card and last card....
+    setTimeout(function() {
+      placeCard('player',3, buildCard(playersHand[2],false));
+    }, 1000);
 
-    if (!($('.hit-button').disabled)) {        // player didn't bust
-      $('.stand-button').trigger('click');   // hit me!
-    }
+    setTimeout(function() {
+      $('.player-cards .card-3 .flipper').addClass('flip');
+      $('.stand-button').trigger('click');
+    }, 2000);
+
+    // playerTotal = calculateTotals(playersHand, 'player');
+    //
+    // // check to see if player busted or hit the card limit for this game...act accordingly
+    // if (playerTotal > 21){
+    //   $('.hit-button').prop('disabled', true);
+    //   $('.stand-button').prop('disabled', true);
+    //   checkWin();
+    // } else if (playersHand.length == 6) {
+    //   $('.hit-button').prop('disabled', true);
+    //   $('.stand-button').trigger('click');
+    // }
+    //
+    // $('.hit-button').trigger('click');  // hit me!
+    //
+    // //Use the hit button status to determine if we need to trigger stand...if disabled then player busted
+    //
+    // if (!($('.hit-button').disabled)) {        // player didn't bust
+    //   $('.stand-button').trigger('click');   // hit me!
+    // }
 
   });
 
@@ -107,7 +135,7 @@ var x = $('body').addClass('bg1');
 
     setTimeout(function() {
       placeCard('player',2, buildCard(playersHand[1],true));
-    }, 100);
+    }, 1000);
 
     setTimeout(function() {
       placeCard('dealer',2, buildCard(dealersHand[1],false));
@@ -170,7 +198,7 @@ var x = $('body').addClass('bg1');
 
       cardHTML = buildCard(dealersHand[dealersHand.length - 1],true);
 
-      placeCard('dealer',dealersHand.length, cardHTML);
+      placeCard('dealer',dealersHand.length, cardHTML, delayOffset);
 
       dealersTotal = calculateTotals(dealersHand, 'dealer');
     }
@@ -236,7 +264,10 @@ var x = $('body').addClass('bg1');
       $('#game-message').html("PLAYER LOST THEIR BANKROLL");
     }
 
-    $('#game-modal').modal('show');
+    setTimeout(function() {
+      $('#game-modal').modal('show');
+    }, 2000);
+
   }
 
 

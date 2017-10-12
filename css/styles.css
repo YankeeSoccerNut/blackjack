@@ -73,10 +73,23 @@ div{
   margin-left: -40px;
   height: 50px;
   width: 100px;
-  /* background-color:  black; */
-  transform: perspective( 400px ) rotateX(30deg) skewX(-30deg);
 }
 
+.the-trapdoor:hover {
+  background-color:  black;
+/*   transform: perspective( 400px ) rotateX(30deg) skewX(-30deg);
+ */
+  overflow-y: hidden;
+	max-height: 50px; /* approximate max height */
+
+	transition-property: all;
+	transition-duration: 1.5s;
+	transition-timing-function: cubic-bezier(0, 0, 1, 1.5);
+}
+
+.the-trapdoor.closed{
+  max-height: 0;
+}
 .steam-char{
   /* display: inline-block; */
   position: relative;
@@ -96,6 +109,19 @@ div{
 #game-message{
   background-color: #277714;
 }
+
+/* Animation */
+#steamfly{
+  animation: steamfly 5s infinite;
+  animation-direction: alternate;
+}
+@keyframes steamfly {
+    0%   {top: 100px; right: 100px;}
+    50%  {top: 300px; right: 300px; perspective: 300px}
+    75%  {top: 500px; right: 500px;}
+    100% {top: 10px; left: 900px;}
+}
+
 /* Let's try flipping! */
 
 .flipper{
