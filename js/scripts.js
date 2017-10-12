@@ -8,6 +8,7 @@ var x = $('body').addClass('bg1');
   var playerBank = 100;
   var playerBet = 0;
   var dealersHand = [];
+  var playerHasInsurance = false;
   const freshDeck = createDeck();  // not technically a constructor...no 'new'
   console.log(freshDeck);
 
@@ -119,6 +120,7 @@ var x = $('body').addClass('bg1');
     playersHand.push(theDeck.shift());
     dealersHand.push(theDeck.shift());
 
+
     // // Test Blackjack
     // playersHand.push('1h');
     // playersHand.push('13h');
@@ -152,9 +154,10 @@ var x = $('body').addClass('bg1');
     if (playerTotal == 21){
       $('.dd-button').css('display','none'); // can't double-down
       // if dealersTotal == 11 then they're showing an Ace....
-      if (dealersTotal == 11){
-        $('#game-message').html("Dealer Showing Ace...Implement Insurance?");
-        $('#game-modal').modal('show');
+      // offer insurance if the player has sufficient bank...
+      if ((dealersTotal == 11) && (playerBank >= .5 * playerBet)){
+        playerHasInsurance = false;
+        $('.ins-button').css('display','inline-block');  // show insurance
       }
     } else if (playerBank >= playerBet){   // allow the player to double-down
       $('.dd-button').css('display','inline-block');
@@ -188,6 +191,16 @@ var x = $('body').addClass('bg1');
     }
 
   });
+
+  $('.ins-button').click(function() {
+    playerHasInsurance = true;
+    playerBank -= playerBet * .5;
+    $('.player-bank').html(`${playerBank}`);
+
+    $('.ins-button').addClass('btn-success');  // visual cue for insurance
+    $('.ins-button').prop('disabled', true);  // can only buy once for hand
+  });
+
 
   $('.stand-button').click(function() {
     var cardHTML = "";
@@ -246,9 +259,16 @@ var x = $('body').addClass('bg1');
     }
 
     if (playerBlackJack && dealerBlackJack){
-      // it's a push...
-      playerBank += playerBet;
-      $('#game-message').html("NO WINNER - PUSH");
+      if (playerHasInsurance){
+        $('.ins-button').css('display','none');
+        $('.ins-button').prop('disabled', false);  // can only buy once for hand
+        playerBank += playerBet * 2;  // even money payoff
+        $('#game-message').html(`Insurance paid off!  Player wins ${playerBet * 1}`);
+      }
+      else {// it's a push...
+        playerBank += playerBet;
+        $('#game-message').html("NO WINNER - PUSH");
+      }
     } else if (playerBlackJack) {
       // Player Wins 150%
       playerBank += playerBet * 2.5;
